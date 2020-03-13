@@ -9,7 +9,7 @@
 console.disableYellowBox = true;
 
 import React, { Component } from 'react';
-import { ActivityIndicator, Dimensions, FlatList, Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Image, Text, View } from 'react-native';
 import { Divider, SearchBar } from 'react-native-elements';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -81,6 +81,7 @@ export default class App extends Component {
   render = () => (
     <View style={styles.container}>
       <SearchBar
+        placeholder="Type here..."
         value={this.state.search}
         onChangeText={this.onChangeText}
       />
