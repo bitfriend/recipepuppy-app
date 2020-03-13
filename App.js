@@ -6,44 +6,73 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+console.disableYellowBox = true;
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import React, { Component } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Card, SearchBar } from 'react-native-elements';
+import qs from 'qs';
 
-type Props = {};
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-      </View>
-    );
+export default class App extends Component {
+  state = {
+    search: 'omelet',
+    json: {
+      title: '',
+      version: null,
+      href: '',
+      results: []
+    }
   }
+
+  componentDidMount() {
+    this.doSearch(this.state.search);
+  }
+
+  doSearch(value) {
+    const data = {
+      i: 'onions,garlic',
+      q: value,
+      p: 3
+    };
+    fetch({
+      url: 'http://66.246.138.180/api/?' + qs.stringify(data, { encode: false }),
+      method: 'GET'
+    }).then(response => {
+      console.log('response', response);
+      return response.json();
+    }).then(json => {
+      this.setState({ json });
+    }).catch(error => {
+      console.log('error', error.message);
+    });
+  }
+
+  onChangeKeyword = (value) => {
+    this.setState({ search: value });
+    this.doSearch(value);
+  }
+
+  render = () => (
+    <View style={styles.container}>
+      <SearchBar
+        value={this.state.search}
+        onChange={this.onChangeKeyword}
+      />
+      <FlatList
+        data={this.state.json.results}
+        renderItem={this.renderItem}
+      />
+    </View>
+  )
+
+  renderItem = ({ item, index }) => (
+    <Card title={item.title}>
+    </Card>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    flex: 1
+  }
 });
