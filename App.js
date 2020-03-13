@@ -11,6 +11,7 @@ console.disableYellowBox = true;
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Card, SearchBar } from 'react-native-elements';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import qs from 'qs';
 
 export default class App extends Component {
@@ -35,7 +36,8 @@ export default class App extends Component {
       p: 3
     };
     fetch({
-      url: 'http://66.246.138.180/api/?' + qs.stringify(data, { encode: false }),
+      // url: 'http://www.recipepuppy.com/api/?' + qs.stringify(data, { encode: false }),
+      url: 'http://www.recipepuppy.com/api/?i=onions,garlic&q=omelet&p=3',
       method: 'GET'
     }).then(response => {
       console.log('response', response);
@@ -73,6 +75,7 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: getStatusBarHeight(true)
   }
 });
